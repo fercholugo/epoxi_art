@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://epoxyart.up.railway.app";
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -15,12 +17,13 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: "EpoxyArt — Decoración en Resina Epóxica",
     template: "%s | EpoxyArt",
   },
   description:
-    "Transforma tus espacios con arte líquido. Pisos y paredes en resina epóxica con diseño personalizado por IA. +350 proyectos · 8 años de experiencia · Garantía 5 años.",
+    "Transforma tus espacios con arte líquido. Pisos y paredes en resina epóxica con diseño personalizado. +350 proyectos · 8 años de experiencia · Garantía 5 años.",
   keywords: [
     "resina epoxica",
     "pisos epoxicos",
@@ -29,19 +32,60 @@ export const metadata: Metadata = {
     "paredes decorativas",
     "resina decorativa",
     "diseño de interiores",
+    "piso resina Colombia",
+    "arte en resina",
   ],
   openGraph: {
     type: "website",
     locale: "es_CO",
+    url: siteUrl,
     siteName: "EpoxyArt",
     title: "EpoxyArt — Decoración en Resina Epóxica Premium",
     description:
-      "Transforma tus espacios con arte líquido. Pisos y paredes en resina epóxica con diseño por IA.",
+      "Transforma tus espacios con arte líquido. Pisos y paredes en resina epóxica con diseño personalizado. Cotiza gratis.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "EpoxyArt — Decoración en Resina Epóxica Premium",
+    description:
+      "Transforma tus espacios con arte líquido. Cotiza gratis tu proyecto.",
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+    },
   },
+  alternates: {
+    canonical: siteUrl,
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: "EpoxyArt",
+  description:
+    "Decoración en resina epóxica para pisos y paredes. Diseños personalizados con acabados premium.",
+  url: siteUrl,
+  telephone: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER
+    ? `+${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`
+    : undefined,
+  priceRange: "$$",
+  areaServed: "Colombia",
+  serviceType: [
+    "Pisos en resina epóxica",
+    "Paredes decorativas en resina",
+    "Acabados especiales epóxicos",
+    "Pisos comerciales epóxicos",
+  ],
+  sameAs: [
+    process.env.NEXT_PUBLIC_INSTAGRAM_URL,
+    process.env.NEXT_PUBLIC_FACEBOOK_URL,
+  ].filter(Boolean),
 };
 
 export default function RootLayout({
@@ -51,6 +95,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${inter.variable} ${playfair.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="font-sans antialiased bg-dark text-light">
         {children}
       </body>
