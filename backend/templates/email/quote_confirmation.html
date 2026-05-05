@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cotización EpoxyArt</title>
+  <style>
+    body { margin: 0; padding: 0; background: #0e0e0e; font-family: Arial, sans-serif; }
+    .wrapper { max-width: 600px; margin: 0 auto; padding: 32px 16px; }
+    .card { background: #1a1a1a; border: 1px solid #c9a84c33; border-radius: 12px; padding: 40px; }
+    .logo { font-size: 28px; font-weight: 900; color: #c9a84c; letter-spacing: 4px; margin-bottom: 8px; }
+    .logo span { color: #f5f0e8; }
+    h1 { color: #f5f0e8; font-size: 22px; margin: 24px 0 8px; }
+    p { color: #9a8f7f; font-size: 15px; line-height: 1.6; margin: 0 0 16px; }
+    .highlight { color: #f5f0e8; }
+    .price-box { background: #242424; border: 1px solid #c9a84c40; border-radius: 8px; padding: 20px; margin: 24px 0; }
+    .price-label { color: #9a8f7f; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+    .price-value { color: #c9a84c; font-size: 36px; font-weight: 900; margin: 4px 0; }
+    .price-note { color: #9a8f7f; font-size: 12px; }
+    .detail-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #ffffff10; }
+    .detail-label { color: #9a8f7f; font-size: 13px; }
+    .detail-value { color: #f5f0e8; font-size: 13px; font-weight: 600; }
+    .steps { background: #0e0e0e; border-radius: 8px; padding: 20px; margin: 24px 0; }
+    .step { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+    .step-num { background: #c9a84c; color: #0e0e0e; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; flex-shrink: 0; }
+    .step-text { color: #9a8f7f; font-size: 13px; }
+    .step-text strong { color: #f5f0e8; display: block; margin-bottom: 2px; }
+    .footer { text-align: center; margin-top: 32px; padding-top: 24px; border-top: 1px solid #ffffff10; }
+    .footer p { font-size: 12px; color: #9a8f7f66; }
+    .whatsapp-btn { display: inline-block; background: #25D366; color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 700; margin: 16px 0; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+      <div class="logo">EPOXY<span>ART</span></div>
+      <p style="color:#9a8f7f;font-size:13px;margin:0;">Arte líquido para tus espacios</p>
+
+      <h1>¡Hola, {{nombre}}!</h1>
+      <p>
+        Recibimos tu solicitud de cotización. Estamos revisando tu proyecto y nos pondremos
+        en contacto contigo dentro de las próximas <span class="highlight">24 horas</span>.
+      </p>
+
+      <div class="price-box">
+        <div class="price-label">Precio estimado</div>
+        <div class="price-value">{{precio_estimado}}</div>
+        <div class="price-note">Estimado preliminar. El precio final puede variar según inspección en sitio.</div>
+      </div>
+
+      <div style="margin:24px 0;">
+        <div class="detail-row">
+          <span class="detail-label">Superficie</span>
+          <span class="detail-value">{{tipo_superficie}}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Área</span>
+          <span class="detail-value">{{area_m2}} m²</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Acabado</span>
+          <span class="detail-value">{{tipo_acabado}}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Ciudad</span>
+          <span class="detail-value">{{ciudad}}</span>
+        </div>
+      </div>
+
+      <div class="steps">
+        <p style="color:#f5f0e8;font-size:14px;font-weight:700;margin:0 0 16px;">¿Qué sigue?</p>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">
+            <strong>Revisamos tu solicitud</strong>
+            Nuestro equipo analiza los detalles de tu proyecto.
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">
+            <strong>Te contactamos</strong>
+            Un especialista se comunica contigo para agendar una visita de inspección.
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">
+            <strong>Cotización definitiva</strong>
+            Recibes el presupuesto final con garantía escrita incluida.
+          </div>
+        </div>
+      </div>
+
+      <p>¿Tienes preguntas? Escríbenos por WhatsApp:</p>
+      <a href="https://wa.me/573001234567" class="whatsapp-btn">💬 Chatear por WhatsApp</a>
+
+      <div class="footer">
+        <p>EpoxyArt · Pisos y paredes en resina epóxica premium<br />
+        Este email fue enviado porque solicitaste una cotización en epoxyart.co</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

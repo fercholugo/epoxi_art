@@ -1,0 +1,97 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: epoxyart_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: epoxyart
+      POSTGRES_PASSWORD: epoxyart_dev_pass
+      POSTGRES_DB: epoxyart_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U epoxyart -d epoxyart_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - epoxyart_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: epoxyart_redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - epoxyart_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: epoxyart_backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    networks:
+      - epoxyart_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: epoxyart_frontend
+    restart: unless-stopped
+    env_file:
+      - ./frontend/.env.local
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - "3000:3000"
+    networks:
+      - epoxyart_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: epoxyart_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - epoxyart_network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  epoxyart_network:
+    driver: bridge
