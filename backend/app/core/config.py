@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import field_validator
 from typing import List
 
 
@@ -11,6 +12,15 @@ class Settings(BaseSettings):
 
     # Base de datos
     database_url: str = "postgresql+asyncpg://epoxyart:epoxyart_dev_pass@postgres:5432/epoxyart_db"
+
+    @field_validator("database_url", mode="before")
+    @classmethod
+    def fix_database_url(cls, v: str) -> str:
+        if v.startswith("postgres://"):
+            return v.replace("postgres://", "postgresql+asyncpg://", 1)
+        if v.startswith("postgresql://"):
+            return v.replace("postgresql://", "postgresql+asyncpg://", 1)
+        return v
     redis_url: str = "redis://redis:6379/0"
 
     # IA
