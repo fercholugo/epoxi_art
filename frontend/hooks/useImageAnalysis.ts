@@ -9,7 +9,7 @@ interface UseImageAnalysisReturn {
   preview: string | null;
   result: AnalysisResult | null;
   error: string | null;
-  fileInputRef: React.RefObject<HTMLInputElement | null>;
+  fileInputRef: React.RefObject<HTMLInputElement>;
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleDrop: (e: React.DragEvent<HTMLDivElement>) => void;
   handleDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
@@ -31,7 +31,7 @@ function validate(file: File): string | null {
 }
 
 export function useImageAnalysis(): UseImageAnalysisReturn {
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [status, setStatus] = useState<AnalysisStatus>("idle");
   const [preview, setPreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
