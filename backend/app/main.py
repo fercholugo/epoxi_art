@@ -14,10 +14,17 @@ from app.api.v1.router import api_router
 import app.models  # noqa: F401
 
 
+logger = logging.getLogger(__name__)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        logger.info("Database tables created/verified successfully")
+    except Exception as e:
+        logger.warning(f"Database init failed (app will still start): {e}")
     yield
 
 
