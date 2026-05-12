@@ -27,7 +27,8 @@ class Settings(BaseSettings):
     anthropic_api_key: str = ""
 
     # Email
-    resend_api_key: str = ""
+    sendgrid_api_key: str = ""
+    email_from: str = ""
     email_reply_to: str = ""
     email_to: str = ""
 

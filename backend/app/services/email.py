@@ -1,21 +1,19 @@
-"""Servicio de envío de emails con Resend API.
+"""Servicio de envío de emails con SendGrid API.
 
-En desarrollo (RESEND_API_KEY vacío) solo loguea — no falla.
-FROM fijo: onboarding@resend.dev (tier gratuito sin dominio verificado)
-Reply-To: email del negocio, para que los clientes puedan responder.
+En desarrollo (SENDGRID_API_KEY vacío) solo loguea — no falla.
 """
 import asyncio
 import logging
 from pathlib import Path
 
-import resend
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail, ReplyTo
 
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
 TEMPLATES_DIR = Path(__file__).parent.parent.parent / "templates" / "email"
-FROM_ADDRESS = "EpoxyArt <onboarding@resend.dev>"
 
 
 def _load_template(name: str, **kwargs: str) -> str:
@@ -30,22 +28,22 @@ def _load_template(name: str, **kwargs: str) -> str:
 
 
 async def _send(to: str, subject: str, html: str) -> None:
-    if not settings.resend_api_key:
-        logger.info("[EMAIL — Resend no configurado] Para: %s | Asunto: %s", to, subject)
+    if not settings.sendgrid_api_key:
+        logger.info("[EMAIL — SendGrid no configurado] Para: %s | Asunto: %s", to, subject)
         return
 
-    resend.api_key = settings.resend_api_key
-    params: resend.Emails.SendParams = {
-        "from": FROM_ADDRESS,
-        "to": [to],
-        "subject": subject,
-        "html": html,
-    }
+    message = Mail(
+        from_email=(settings.email_from, "EpoxyArt"),
+        to_emails=to,
+        subject=subject,
+        html_content=html,
+    )
     if settings.email_reply_to:
-        params["reply_to"] = settings.email_reply_to
+        message.reply_to = ReplyTo(settings.email_reply_to)
 
     try:
-        await asyncio.to_thread(resend.Emails.send, params)
+        sg = SendGridAPIClient(api_key=settings.sendgrid_api_key)
+        await asyncio.to_thread(sg.send, message)
         logger.info("Email enviado a %s — %s", to, subject)
     except Exception as exc:
         logger.error("Error enviando email a %s: %s", to, exc)
