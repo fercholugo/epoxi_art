@@ -52,7 +52,7 @@ async def _send(to: str, subject: str, html: str) -> None:
             port=settings.smtp_port,
             username=settings.smtp_user,
             password=settings.smtp_password,
-            start_tls=True,
+            use_tls=True,
         )
         logger.info("Email enviado a %s — %s", to, subject)
     except Exception as exc:
