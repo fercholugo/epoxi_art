@@ -1,23 +1,24 @@
-"""Servicio de envío de emails con aiosmtplib.
+"""Servicio de envío de emails con Resend API.
 
-En desarrollo (SMTP_USER vacío) solo loguea el email — no falla.
+En desarrollo (RESEND_API_KEY vacío) solo loguea — no falla.
+FROM fijo: onboarding@resend.dev (tier gratuito sin dominio verificado)
+Reply-To: email del negocio, para que los clientes puedan responder.
 """
+import asyncio
 import logging
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from pathlib import Path
 
-import aiosmtplib
+import resend
 
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
 TEMPLATES_DIR = Path(__file__).parent.parent.parent / "templates" / "email"
+FROM_ADDRESS = "EpoxyArt <onboarding@resend.dev>"
 
 
 def _load_template(name: str, **kwargs: str) -> str:
-    """Carga un template HTML y reemplaza los placeholders {key}."""
     path = TEMPLATES_DIR / name
     if not path.exists():
         logger.warning("Template de email no encontrado: %s", path)
@@ -29,31 +30,22 @@ def _load_template(name: str, **kwargs: str) -> str:
 
 
 async def _send(to: str, subject: str, html: str) -> None:
-    """Intenta enviar email. Si no hay SMTP configurado, loguea y continúa."""
-    if not settings.smtp_user:
-        logger.info(
-            "[EMAIL — modo dev, SMTP no configurado]\n"
-            "  Para: %s\n  Asunto: %s\n  Contenido: (HTML omitido)",
-            to,
-            subject,
-        )
+    if not settings.resend_api_key:
+        logger.info("[EMAIL — Resend no configurado] Para: %s | Asunto: %s", to, subject)
         return
 
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = subject
-    msg["From"] = settings.email_from
-    msg["To"] = to
-    msg.attach(MIMEText(html, "html", "utf-8"))
+    resend.api_key = settings.resend_api_key
+    params: resend.Emails.SendParams = {
+        "from": FROM_ADDRESS,
+        "to": [to],
+        "subject": subject,
+        "html": html,
+    }
+    if settings.email_reply_to:
+        params["reply_to"] = settings.email_reply_to
 
     try:
-        await aiosmtplib.send(
-            msg,
-            hostname=settings.smtp_host,
-            port=settings.smtp_port,
-            username=settings.smtp_user,
-            password=settings.smtp_password,
-            use_tls=True,
-        )
+        await asyncio.to_thread(resend.Emails.send, params)
         logger.info("Email enviado a %s — %s", to, subject)
     except Exception as exc:
         logger.error("Error enviando email a %s: %s", to, exc)

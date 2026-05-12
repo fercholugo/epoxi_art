@@ -27,11 +27,8 @@ class Settings(BaseSettings):
     anthropic_api_key: str = ""
 
     # Email
-    smtp_host: str = "smtp.gmail.com"
-    smtp_port: int = 587
-    smtp_user: str = ""
-    smtp_password: str = ""
-    email_from: str = "EpoxyArt <noreply@epoxyart.co>"
+    resend_api_key: str = ""
+    email_reply_to: str = ""
     email_to: str = ""
 
     # Seguridad
