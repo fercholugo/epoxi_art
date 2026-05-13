@@ -110,3 +110,43 @@ export async function patchQuote(id: number, estado: string, notas?: string) {
     body: JSON.stringify({ estado, notas }),
   });
 }
+
+// ─── Products ─────────────────────────────────────────────────────────────────
+
+export interface ProductItem {
+  id: number;
+  nombre: string;
+  descripcion: string | null;
+  precio: number;
+  imagen_url: string | null;
+  categoria: string;
+  disponible: boolean;
+  destacado: boolean;
+  createdAt: string;
+}
+
+export interface ProductPayload {
+  nombre: string;
+  descripcion?: string;
+  precio: number;
+  imagen_url?: string;
+  categoria: string;
+  disponible: boolean;
+  destacado: boolean;
+}
+
+export async function listAllProducts(): Promise<ProductItem[]> {
+  return request("/v1/products/admin/all");
+}
+
+export async function createProduct(data: ProductPayload): Promise<ProductItem> {
+  return request("/v1/products", { method: "POST", body: JSON.stringify(data) });
+}
+
+export async function updateProduct(id: number, data: Partial<ProductPayload>): Promise<ProductItem> {
+  return request(`/v1/products/${id}`, { method: "PUT", body: JSON.stringify(data) });
+}
+
+export async function deleteProduct(id: number): Promise<void> {
+  return request(`/v1/products/${id}`, { method: "DELETE" });
+}

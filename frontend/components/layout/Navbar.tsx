@@ -6,10 +6,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
-  { label: "Servicios", href: "#servicios" },
-  { label: "Diseño IA", href: "#ia" },
-  { label: "Galería", href: "#galeria" },
-  { label: "Cotizar", href: "#cotizar" },
+  { label: "Servicios", href: "#servicios", isPage: false },
+  { label: "Diseño IA", href: "#ia", isPage: false },
+  { label: "Galería", href: "#galeria", isPage: false },
+  { label: "Tienda", href: "/tienda", isPage: true },
+  { label: "Cotizar", href: "#cotizar", isPage: false },
 ];
 
 export default function Navbar() {
@@ -53,13 +54,23 @@ export default function Navbar() {
         <ul className="hidden md:flex items-center gap-8" role="list">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
-              <a
-                href={link.href}
-                className="text-muted hover:text-light text-sm font-medium transition-colors relative group"
-              >
-                {link.label}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gold group-hover:w-full transition-all duration-300" />
-              </a>
+              {link.isPage ? (
+                <Link
+                  href={link.href}
+                  className="text-muted hover:text-light text-sm font-medium transition-colors relative group"
+                >
+                  {link.label}
+                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gold group-hover:w-full transition-all duration-300" />
+                </Link>
+              ) : (
+                <a
+                  href={link.href}
+                  className="text-muted hover:text-light text-sm font-medium transition-colors relative group"
+                >
+                  {link.label}
+                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gold group-hover:w-full transition-all duration-300" />
+                </a>
+              )}
             </li>
           ))}
         </ul>
@@ -113,13 +124,23 @@ export default function Navbar() {
             <ul className="px-6 py-4 flex flex-col gap-4" role="list">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
-                  <a
-                    href={link.href}
-                    className="text-muted hover:text-light font-medium transition-colors block py-1"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {link.label}
-                  </a>
+                  {link.isPage ? (
+                    <Link
+                      href={link.href}
+                      className="text-muted hover:text-light font-medium transition-colors block py-1"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <a
+                      href={link.href}
+                      className="text-muted hover:text-light font-medium transition-colors block py-1"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {link.label}
+                    </a>
+                  )}
                 </li>
               ))}
               <li>
