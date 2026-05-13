@@ -17,12 +17,29 @@ import app.models  # noqa: F401
 logger = logging.getLogger(__name__)
 
 
+async def _seed_admin() -> None:
+    if not settings.admin_email or not settings.admin_password:
+        return
+    from sqlalchemy import select
+    from app.core.database import AsyncSessionLocal
+    from app.core.security import get_password_hash
+    from app.models.admin import Admin
+    async with AsyncSessionLocal() as db:
+        result = await db.execute(select(Admin).where(Admin.email == settings.admin_email))
+        if result.scalar_one_or_none():
+            return
+        db.add(Admin(email=settings.admin_email, password_hash=get_password_hash(settings.admin_password), is_active=True))
+        await db.commit()
+        logger.info("Admin inicial creado: %s", settings.admin_email)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
         logger.info("Database tables created/verified successfully")
+        await _seed_admin()
     except Exception as e:
         logger.warning(f"Database init failed (app will still start): {e}")
     yield

@@ -36,6 +36,10 @@ class Settings(BaseSettings):
     secret_key: str = "dev-secret-key-change-in-production"
     allowed_origins: str = "http://localhost:3000,http://localhost"
 
+    # Admin inicial
+    admin_email: str = ""
+    admin_password: str = ""
+
     # App
     environment: str = "development"
     debug: bool = True
