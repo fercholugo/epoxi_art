@@ -8,6 +8,7 @@ import { getToken, clearToken } from "@/lib/admin-api";
 const NAV = [
   { href: "/admin/dashboard", label: "Dashboard", icon: "⬛" },
   { href: "/admin/cotizaciones", label: "Cotizaciones", icon: "📋" },
+  { href: "/admin/productos", label: "Productos", icon: "🛍️" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
