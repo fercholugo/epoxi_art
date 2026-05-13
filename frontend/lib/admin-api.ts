@@ -1,4 +1,4 @@
-const BASE = process.env.NEXT_PUBLIC_API_URL ?? "/api";
+const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 const TOKEN_KEY = "epoxyart_admin_token";
 
@@ -43,7 +43,7 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
 
 export async function login(email: string, password: string) {
   const data = await request<{ access_token: string; admin_email: string }>(
-    "/v1/auth/login",
+    "/api/v1/auth/login",
     { method: "POST", body: JSON.stringify({ email, password }) }
   );
   setToken(data.access_token);
@@ -83,7 +83,7 @@ export interface DashboardStats {
 }
 
 export async function getStats(): Promise<DashboardStats> {
-  return request("/v1/quotes/stats");
+  return request("/api/v1/quotes/stats");
 }
 
 export async function listQuotes(params: {
@@ -136,11 +136,11 @@ export interface ProductPayload {
 }
 
 export async function listAllProducts(): Promise<ProductItem[]> {
-  return request("/v1/products/admin/all");
+  return request("/api/v1/products/admin/all");
 }
 
 export async function createProduct(data: ProductPayload): Promise<ProductItem> {
-  return request("/v1/products", { method: "POST", body: JSON.stringify(data) });
+  return request("/api/v1/products", { method: "POST", body: JSON.stringify(data) });
 }
 
 export async function updateProduct(id: number, data: Partial<ProductPayload>): Promise<ProductItem> {
