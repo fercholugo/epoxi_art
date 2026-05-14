@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 export interface Product {
   id: number;
@@ -22,10 +22,107 @@ const CATEGORIA_LABELS: Record<string, string> = {
   otro: "Artículo",
 };
 
-export default function ProductCard({ product }: { product: Product }) {
-  const [hovered, setHovered] = useState(false);
-  const [lightbox, setLightbox] = useState(false);
+function ImageViewer({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+  const [scale, setScale] = useState(1);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const dragging = useRef(false);
+  const dragOrigin = useRef({ mx: 0, my: 0, px: 0, py: 0 });
 
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  const zoom = useCallback((delta: number) => {
+    setScale(s => {
+      const next = Math.min(5, Math.max(1, s + delta));
+      if (next === 1) setPos({ x: 0, y: 0 });
+      return next;
+    });
+  }, []);
+
+  const onWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    zoom(e.deltaY < 0 ? 0.3 : -0.3);
+  };
+
+  const onMouseDown = (e: React.MouseEvent) => {
+    if (scale <= 1) return;
+    dragging.current = true;
+    dragOrigin.current = { mx: e.clientX, my: e.clientY, px: pos.x, py: pos.y };
+  };
+
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (!dragging.current) return;
+    setPos({
+      x: dragOrigin.current.px + (e.clientX - dragOrigin.current.mx),
+      y: dragOrigin.current.py + (e.clientY - dragOrigin.current.my),
+    });
+  };
+
+  const onMouseUp = () => { dragging.current = false; };
+
+  const onDoubleClick = () => {
+    if (scale > 1) { setScale(1); setPos({ x: 0, y: 0 }); }
+    else { setScale(2.5); }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/95 flex flex-col select-none" onClick={onClose}>
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 py-3 bg-black/60 shrink-0" onClick={e => e.stopPropagation()}>
+        <p className="text-white/70 text-sm truncate max-w-xs">{alt}</p>
+        <div className="flex items-center gap-3">
+          <button onClick={() => zoom(0.5)} className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white text-lg font-bold flex items-center justify-center transition-colors">+</button>
+          <span className="text-white/60 text-sm w-12 text-center">{Math.round(scale * 100)}%</span>
+          <button onClick={() => zoom(-0.5)} className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white text-lg font-bold flex items-center justify-center transition-colors">−</button>
+          <button onClick={() => { setScale(1); setPos({ x: 0, y: 0 }); }} className="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs transition-colors">Reset</button>
+          <button onClick={onClose} className="w-8 h-8 rounded-full bg-white/10 hover:bg-red-500/60 text-white flex items-center justify-center transition-colors">✕</button>
+        </div>
+      </div>
+
+      {/* Imagen con zoom+pan */}
+      <div
+        className="flex-1 overflow-hidden flex items-center justify-center"
+        onWheel={onWheel}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
+        onMouseLeave={onMouseUp}
+        onClick={e => e.stopPropagation()}
+        style={{ cursor: scale > 1 ? (dragging.current ? "grabbing" : "grab") : "zoom-in" }}
+      >
+        <img
+          src={src}
+          alt={alt}
+          onDoubleClick={onDoubleClick}
+          draggable={false}
+          style={{
+            transform: `scale(${scale}) translate(${pos.x / scale}px, ${pos.y / scale}px)`,
+            transition: dragging.current ? "none" : "transform 0.15s ease",
+            maxWidth: "90vw",
+            maxHeight: "85vh",
+            objectFit: "contain",
+            userSelect: "none",
+          }}
+        />
+      </div>
+
+      {/* Hint */}
+      <p className="text-center text-white/30 text-xs py-2 shrink-0">
+        Scroll para hacer zoom · Arrastra para mover · Doble click para {scale > 1 ? "resetear" : "ampliar"} · ESC para cerrar
+      </p>
+    </div>
+  );
+}
+
+export default function ProductCard({ product }: { product: Product }) {
+  const [viewer, setViewer] = useState(false);
   const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "";
   const msg = encodeURIComponent(
     `Hola, me interesa el producto: *${product.nombre}* (US$ ${Number(product.precio).toLocaleString("es-CO")}). ¿Está disponible?`
@@ -34,22 +131,27 @@ export default function ProductCard({ product }: { product: Product }) {
 
   return (
     <>
-      <div
-        className="bg-dark-2 border border-dark-3 rounded-2xl overflow-visible group hover:border-gold/30 hover:shadow-[0_0_24px_rgba(201,168,76,0.1)] transition-all duration-300 flex flex-col relative"
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-      >
+      <div className="bg-dark-2 border border-dark-3 rounded-2xl overflow-hidden group hover:border-gold/30 hover:shadow-[0_0_24px_rgba(201,168,76,0.1)] transition-all duration-300 flex flex-col">
         {/* Imagen */}
         <div
-          className="aspect-[4/5] bg-dark-3 overflow-hidden rounded-t-2xl relative cursor-pointer"
-          onClick={() => product.imagen_url && setLightbox(true)}
+          className="aspect-[4/5] bg-dark-3 overflow-hidden relative cursor-zoom-in"
+          onClick={() => product.imagen_url && setViewer(true)}
         >
           {product.imagen_url ? (
-            <img
-              src={product.imagen_url}
-              alt={product.nombre}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
+            <>
+              <img
+                src={product.imagen_url}
+                alt={product.nombre}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors duration-300 flex items-center justify-center">
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/60 rounded-full p-3">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                  </svg>
+                </div>
+              </div>
+            </>
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <span className="text-4xl opacity-20">🏺</span>
@@ -60,28 +162,7 @@ export default function ProductCard({ product }: { product: Product }) {
               Destacado
             </span>
           )}
-          {product.imagen_url && (
-            <div className="absolute inset-0 flex items-end justify-center pb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <span className="bg-black/60 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm">
-                Click para ampliar
-              </span>
-            </div>
-          )}
         </div>
-
-        {/* Zoom flotante al hover */}
-        {hovered && product.imagen_url && (
-          <div
-            className="absolute left-full top-0 ml-3 z-50 w-80 h-80 rounded-2xl overflow-hidden shadow-2xl border border-gold/20 pointer-events-none"
-            style={{ animation: "fadeIn 0.15s ease" }}
-          >
-            <img
-              src={product.imagen_url}
-              alt={product.nombre}
-              className="w-full h-full object-contain bg-dark-2"
-            />
-          </div>
-        )}
 
         {/* Contenido */}
         <div className="p-5 flex flex-col flex-1">
@@ -112,34 +193,9 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
       </div>
 
-      {/* Lightbox */}
-      {lightbox && product.imagen_url && (
-        <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 cursor-zoom-out"
-          onClick={() => setLightbox(false)}
-        >
-          <button
-            className="absolute top-4 right-4 text-white/70 hover:text-white text-3xl leading-none"
-            onClick={() => setLightbox(false)}
-          >
-            ✕
-          </button>
-          <img
-            src={product.imagen_url}
-            alt={product.nombre}
-            className="max-h-[90vh] max-w-[90vw] object-contain rounded-xl shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          />
-          <p className="absolute bottom-6 text-white/60 text-sm">{product.nombre}</p>
-        </div>
+      {viewer && product.imagen_url && (
+        <ImageViewer src={product.imagen_url} alt={product.nombre} onClose={() => setViewer(false)} />
       )}
-
-      <style jsx global>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: scale(0.95); }
-          to { opacity: 1; transform: scale(1); }
-        }
-      `}</style>
     </>
   );
 }
