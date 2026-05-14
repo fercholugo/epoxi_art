@@ -33,7 +33,7 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: "Error del servidor" }));
-    throw new Error(err.detail ?? "Error desconocido");
+    throw new Error(`${err.detail ?? "Error desconocido"} [${res.url}]`);
   }
 
   return res.json();
