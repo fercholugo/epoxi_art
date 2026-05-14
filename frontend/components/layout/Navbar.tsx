@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +17,8 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
@@ -52,33 +55,36 @@ export default function Navbar() {
 
         {/* Desktop links */}
         <ul className="hidden md:flex items-center gap-8" role="list">
-          {NAV_LINKS.map((link) => (
-            <li key={link.href}>
-              {link.isPage ? (
-                <Link
-                  href={link.href}
-                  className="text-muted hover:text-light text-sm font-medium transition-colors relative group"
-                >
-                  {link.label}
-                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gold group-hover:w-full transition-all duration-300" />
-                </Link>
-              ) : (
-                <a
-                  href={link.href}
-                  className="text-muted hover:text-light text-sm font-medium transition-colors relative group"
-                >
-                  {link.label}
-                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gold group-hover:w-full transition-all duration-300" />
-                </a>
-              )}
-            </li>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const href = link.isPage ? link.href : (isHome ? link.href : `/${link.href}`);
+            return (
+              <li key={link.href}>
+                {link.isPage ? (
+                  <Link
+                    href={href}
+                    className="text-muted hover:text-light text-sm font-medium transition-colors relative group"
+                  >
+                    {link.label}
+                    <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gold group-hover:w-full transition-all duration-300" />
+                  </Link>
+                ) : (
+                  <a
+                    href={href}
+                    className="text-muted hover:text-light text-sm font-medium transition-colors relative group"
+                  >
+                    {link.label}
+                    <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gold group-hover:w-full transition-all duration-300" />
+                  </a>
+                )}
+              </li>
+            );
+          })}
         </ul>
 
         {/* CTA + Mobile toggle */}
         <div className="flex items-center gap-4">
           <a
-            href="#cotizar"
+            href={isHome ? "#cotizar" : "/#cotizar"}
             className="hidden md:inline-flex items-center px-5 py-2 rounded-xl bg-gold text-dark font-semibold text-sm hover:bg-gold-light transition-colors shadow-[0_0_15px_rgba(201,168,76,0.3)]"
           >
             COTIZAR AHORA
@@ -122,30 +128,33 @@ export default function Navbar() {
             className="md:hidden bg-dark-2 border-b border-dark-3 overflow-hidden"
           >
             <ul className="px-6 py-4 flex flex-col gap-4" role="list">
-              {NAV_LINKS.map((link) => (
-                <li key={link.href}>
-                  {link.isPage ? (
-                    <Link
-                      href={link.href}
-                      className="text-muted hover:text-light font-medium transition-colors block py-1"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      {link.label}
-                    </Link>
-                  ) : (
-                    <a
-                      href={link.href}
-                      className="text-muted hover:text-light font-medium transition-colors block py-1"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      {link.label}
-                    </a>
-                  )}
-                </li>
-              ))}
+              {NAV_LINKS.map((link) => {
+                const href = link.isPage ? link.href : (isHome ? link.href : `/${link.href}`);
+                return (
+                  <li key={link.href}>
+                    {link.isPage ? (
+                      <Link
+                        href={href}
+                        className="text-muted hover:text-light font-medium transition-colors block py-1"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={href}
+                        className="text-muted hover:text-light font-medium transition-colors block py-1"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        {link.label}
+                      </a>
+                    )}
+                  </li>
+                );
+              })}
               <li>
                 <a
-                  href="#cotizar"
+                  href={isHome ? "#cotizar" : "/#cotizar"}
                   className="inline-flex items-center px-5 py-2.5 rounded-xl bg-gold text-dark font-semibold text-sm hover:bg-gold-light transition-colors mt-2"
                   onClick={() => setMenuOpen(false)}
                 >
