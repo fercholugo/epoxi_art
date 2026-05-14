@@ -97,15 +97,15 @@ export async function listQuotes(params: {
   if (params.page_size) qs.set("page_size", String(params.page_size));
   if (params.estado) qs.set("estado", params.estado);
   if (params.search) qs.set("search", params.search);
-  return request(`/v1/quotes?${qs}`);
+  return request(`/api/v1/quotes?${qs}`);
 }
 
 export async function getQuote(id: number): Promise<QuoteDetail> {
-  return request(`/v1/quotes/${id}`);
+  return request(`/api/v1/quotes/${id}`);
 }
 
 export async function patchQuote(id: number, estado: string, notas?: string) {
-  return request(`/v1/quotes/${id}`, {
+  return request(`/api/v1/quotes/${id}`, {
     method: "PATCH",
     body: JSON.stringify({ estado, notas }),
   });
@@ -144,9 +144,9 @@ export async function createProduct(data: ProductPayload): Promise<ProductItem> 
 }
 
 export async function updateProduct(id: number, data: Partial<ProductPayload>): Promise<ProductItem> {
-  return request(`/v1/products/${id}`, { method: "PUT", body: JSON.stringify(data) });
+  return request(`/api/v1/products/${id}`, { method: "PUT", body: JSON.stringify(data) });
 }
 
 export async function deleteProduct(id: number): Promise<void> {
-  return request(`/v1/products/${id}`, { method: "DELETE" });
+  return request(`/api/v1/products/${id}`, { method: "DELETE" });
 }
