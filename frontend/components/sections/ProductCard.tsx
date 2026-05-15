@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useCurrency } from "@/contexts/currency";
 
 export interface Product {
   id: number;
@@ -123,6 +124,7 @@ function ImageViewer({ src, alt, onClose }: { src: string; alt: string; onClose:
 
 export default function ProductCard({ product }: { product: Product }) {
   const [viewer, setViewer] = useState(false);
+  const { formatPrice } = useCurrency();
   const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "";
   const msg = encodeURIComponent(
     `Hola, me interesa el producto: *${product.nombre}* (US$ ${Number(product.precio).toLocaleString("es-CO")}). ¿Está disponible?`
@@ -175,7 +177,7 @@ export default function ProductCard({ product }: { product: Product }) {
           )}
           <div className="flex items-center justify-between mt-auto pt-3 border-t border-dark-3">
             <span className="text-gold font-bold text-lg">
-              US$ {Number(product.precio).toLocaleString("es-CO", { minimumFractionDigits: 0 })}
+              {formatPrice(product.precio)}
             </span>
             <a
               href={waUrl}

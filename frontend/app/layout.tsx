@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import Providers from "@/components/providers/Providers";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://epoxyart.up.railway.app";
@@ -102,7 +103,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans antialiased bg-dark text-light">
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

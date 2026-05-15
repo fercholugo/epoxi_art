@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useCurrency } from "@/contexts/currency";
 
 const NAV_LINKS = [
   { label: "Servicios", href: "#servicios", isPage: false },
@@ -19,6 +20,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const { currency, toggle } = useCurrency();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
@@ -83,6 +85,16 @@ export default function Navbar() {
 
         {/* CTA + Mobile toggle */}
         <div className="flex items-center gap-4">
+          {/* Currency toggle */}
+          <button
+            onClick={toggle}
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-dark-3 hover:border-gold/50 text-xs font-semibold transition-colors"
+            title="Cambiar moneda"
+          >
+            <span className={currency === "USD" ? "text-gold" : "text-muted"}>USD</span>
+            <span className="text-dark-3 mx-0.5">/</span>
+            <span className={currency === "COP" ? "text-gold" : "text-muted"}>COP</span>
+          </button>
           <a
             href={isHome ? "#cotizar" : "/#cotizar"}
             className="hidden md:inline-flex items-center px-5 py-2 rounded-xl bg-gold text-dark font-semibold text-sm hover:bg-gold-light transition-colors shadow-[0_0_15px_rgba(201,168,76,0.3)]"
