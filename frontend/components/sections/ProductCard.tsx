@@ -175,9 +175,6 @@ export default function ProductCard({ product }: { product: Product }) {
             {CATEGORIA_LABELS[product.categoria] ?? product.categoria}
           </span>
           <h3 className="text-light font-semibold mt-1 mb-2 leading-tight">{product.nombre}</h3>
-          {product.descripcion && (
-            <p className="text-muted text-sm mb-4 line-clamp-2 flex-1">{product.descripcion}</p>
-          )}
           <div className="flex items-center justify-between mt-auto pt-3 border-t border-dark-3">
             <div className="flex flex-col">
               <span className="text-muted text-xs line-through">
