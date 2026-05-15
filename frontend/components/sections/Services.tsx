@@ -31,7 +31,7 @@ const SERVICES: Service[] = [
     title: "Acabados Especiales",
     description:
       "Incrustaciones metálicas, fluorescentes, holográficos y efectos 3D únicos en el mercado.",
-    priceBase: 100,
+    priceBase: 115,
     unit: "m²",
     surfaceType: "acabado_especial",
   },
@@ -41,7 +41,7 @@ const SERVICES: Service[] = [
     title: "Renovación",
     description:
       "Rejuvenece superficies existentes. Cubrimos grietas, manchas y desgastes con nueva vida.",
-    priceBase: 55,
+    priceBase: 65,
     unit: "m²",
     surfaceType: "renovacion",
   },

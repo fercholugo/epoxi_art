@@ -9,8 +9,8 @@ export function cn(...inputs: ClassValue[]) {
 export const BASE_PRICES: Record<SurfaceType, number> = {
   piso_residencial: 80,
   pared_decorativa: 120,
-  acabado_especial: 100,
-  renovacion: 55,
+  acabado_especial: 115,
+  renovacion: 65,
 };
 
 export const FINISH_MULTIPLIERS: Record<FinishType, number> = {
