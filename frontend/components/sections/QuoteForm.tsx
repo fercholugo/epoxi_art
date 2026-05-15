@@ -7,10 +7,10 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import {
   calcPrice,
-  formatCurrency,
   SURFACE_LABELS,
   FINISH_LABELS,
 } from "@/lib/utils";
+import { useCurrency } from "@/contexts/currency";
 import type { SurfaceType, FinishType } from "@/types";
 import { api } from "@/lib/api";
 
@@ -24,11 +24,9 @@ const schema = z.object({
   ciudad: z.string().min(2, "Ciudad requerida"),
   tipoSuperficie: z.enum([
     "piso_residencial",
-    "piso_comercial",
     "pared_decorativa",
     "acabado_especial",
     "renovacion",
-    "exterior_piscina",
   ] as const),
   areaM2: z.number().min(5).max(500),
   tipoAcabado: z.enum(["mate", "semimate", "satinado", "alto_brillo"] as const),
@@ -83,6 +81,7 @@ export default function QuoteForm() {
     },
   });
 
+  const { formatPrice } = useCurrency();
   const area = watch("areaM2") ?? 50;
   const surface = watch("tipoSuperficie") ?? "piso_residencial";
   const finish = watch("tipoAcabado") ?? "mate";
@@ -122,7 +121,7 @@ export default function QuoteForm() {
             <div className="bg-dark-2 rounded-xl p-4 text-left mb-6">
               <p className="text-muted text-sm">Precio estimado</p>
               <p className="text-gold text-3xl font-bold">
-                {formatCurrency(price)}
+                {formatPrice(price)}
               </p>
               <p className="text-muted text-xs mt-1">
                 Valor final puede variar según inspección en sitio
@@ -313,7 +312,7 @@ export default function QuoteForm() {
                 transition={{ duration: 0.2 }}
               >
                 <p className="text-4xl font-bold text-gold mb-1">
-                  {formatCurrency(price)}
+                  {formatPrice(price)}
                 </p>
               </motion.div>
               <p className="text-muted text-xs mb-6">

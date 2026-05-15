@@ -9,7 +9,6 @@ import { useCurrency } from "@/contexts/currency";
 
 const NAV_LINKS = [
   { label: "Servicios", href: "#servicios", isPage: false },
-  { label: "Diseño IA", href: "#ia", isPage: false },
   { label: "Galería", href: "#galeria", isPage: false },
   { label: "Tienda", href: "/tienda", isPage: true },
   { label: "Cotizar", href: "#cotizar", isPage: false },

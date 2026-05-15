@@ -1,11 +1,9 @@
 // Quote types
 export type SurfaceType =
   | "piso_residencial"
-  | "piso_comercial"
   | "pared_decorativa"
   | "acabado_especial"
-  | "renovacion"
-  | "exterior_piscina";
+  | "renovacion";
 
 export type FinishType = "mate" | "semimate" | "satinado" | "alto_brillo";
 

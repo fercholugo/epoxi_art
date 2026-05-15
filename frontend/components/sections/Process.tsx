@@ -12,20 +12,13 @@ const STEPS = [
   },
   {
     number: "02",
-    icon: "🤖",
-    title: "Diseño con IA",
-    description:
-      "Usamos inteligencia artificial para analizar tu espacio y recomendarte paletas de color y texturas perfectas.",
-  },
-  {
-    number: "03",
     icon: "🛠️",
     title: "Preparación",
     description:
       "Limpieza profunda, reparación de grietas y aplicación de imprimante. La base perfecta garantiza el resultado.",
   },
   {
-    number: "04",
+    number: "03",
     icon: "✅",
     title: "Aplicación y Entrega",
     description:
@@ -72,7 +65,7 @@ export default function Process() {
             aria-hidden="true"
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-6">
             {STEPS.map((step, i) => (
               <motion.div
                 key={step.number}

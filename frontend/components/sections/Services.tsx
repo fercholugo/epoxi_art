@@ -16,16 +16,6 @@ const SERVICES: Service[] = [
     surfaceType: "piso_residencial",
   },
   {
-    id: "piso_comercial",
-    icon: "🏢",
-    title: "Piso Comercial",
-    description:
-      "Soluciones resistentes al tráfico intenso para locales, bodegas y espacios industriales.",
-    priceBase: 65,
-    unit: "m²",
-    surfaceType: "piso_comercial",
-  },
-  {
     id: "pared_decorativa",
     icon: "🎨",
     title: "Paredes Decorativas",
@@ -54,16 +44,6 @@ const SERVICES: Service[] = [
     priceBase: 55,
     unit: "m²",
     surfaceType: "renovacion",
-  },
-  {
-    id: "exterior_piscina",
-    icon: "🏊",
-    title: "Exteriores y Piscinas",
-    description:
-      "Epóxico antideslizante resistente a UV, cloro y humedad para terrazas y bordes de piscina.",
-    priceBase: 70,
-    unit: "m²",
-    surfaceType: "exterior_piscina",
   },
 ];
 

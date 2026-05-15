@@ -16,40 +16,40 @@ const TESTIMONIALS: Testimonial[] = [
     name: "María Fernanda López",
     city: "Bogotá",
     rating: 5,
-    text: "Transformaron completamente mi cocina. El efecto mármol quedó impresionante, exactamente como lo pedí. El proceso fue limpio y terminaron en tiempo récord.",
+    text: "Transformaron completamente mi sala. El piso residencial con efecto mármol quedó impresionante, exactamente como lo pedí. El proceso fue limpio y terminaron en tiempo récord.",
     initials: "ML",
   },
   {
     id: "t2",
-    name: "Carlos Andrés Ruiz",
-    city: "Medellín",
-    rating: 5,
-    text: "Contraté a EpoxyArt para mi local comercial y el resultado superó mis expectativas. El piso soporta el tráfico diario sin problema y sigue como el primer día.",
-    initials: "CR",
-  },
-  {
-    id: "t3",
-    name: "Ana Sofía Bermúdez",
-    city: "Cali",
-    rating: 5,
-    text: "La herramienta de IA fue increíble para elegir la paleta de colores. Me ayudó a visualizar el resultado final antes de comenzar. 100% recomendados.",
-    initials: "AB",
-  },
-  {
-    id: "t4",
-    name: "Roberto Jiménez",
-    city: "Barranquilla",
-    rating: 5,
-    text: "Excelente trabajo en el piso de mi terraza. El epóxico antideslizante que usaron es perfecto para la zona de piscina. Ya les pedí cotización para la sala.",
-    initials: "RJ",
-  },
-  {
-    id: "t5",
     name: "Valentina Morales",
     city: "Cartagena",
     rating: 5,
-    text: "El equipo fue muy profesional. Me explicaron cada etapa del proceso y el resultado del pared decorativa con efecto geode es una obra de arte.",
+    text: "El equipo fue muy profesional. Me explicaron cada etapa del proceso y la pared decorativa con efecto geode es una verdadera obra de arte. Mi apartamento quedó irreconocible.",
     initials: "VM",
+  },
+  {
+    id: "t3",
+    name: "Daniel Ospina",
+    city: "Medellín",
+    rating: 5,
+    text: "Compré la lámpara de Iron Man y es simplemente espectacular. La calidad de la resina y los colores son increíbles. Ya pedí la de Batman para mi oficina.",
+    initials: "DO",
+  },
+  {
+    id: "t4",
+    name: "Juliana Castro",
+    city: "Cali",
+    rating: 5,
+    text: "Contraté el servicio de piso residencial y quedé encantada. El acabado satinado que elegí le dio una elegancia total a mi hogar. Los recomiendo totalmente.",
+    initials: "JC",
+  },
+  {
+    id: "t5",
+    name: "Sergio Palomino",
+    city: "Bogotá",
+    rating: 5,
+    text: "La lámpara Océano Profundo que compré es una pieza de colección. Cada vez que la enciendo todos mis invitados preguntan de dónde la saqué. Arte puro en resina.",
+    initials: "SP",
   },
 ];
 
@@ -90,8 +90,8 @@ export default function Testimonials() {
             Lo Que Dicen
           </h2>
           <p className="text-muted max-w-xl mx-auto">
-            Más de 350 proyectos completados. Cada opinión refleja nuestro
-            compromiso con la excelencia.
+            Pisos, paredes y lámparas que transforman espacios. Cada opinión
+            refleja nuestro compromiso con la excelencia.
           </p>
         </motion.div>
 

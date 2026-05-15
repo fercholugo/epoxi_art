@@ -8,11 +8,9 @@ export function cn(...inputs: ClassValue[]) {
 
 export const BASE_PRICES: Record<SurfaceType, number> = {
   piso_residencial: 80,
-  piso_comercial: 65,
   pared_decorativa: 120,
   acabado_especial: 100,
   renovacion: 55,
-  exterior_piscina: 70,
 };
 
 export const FINISH_MULTIPLIERS: Record<FinishType, number> = {
@@ -42,11 +40,9 @@ export function formatCurrency(value: number): string {
 
 export const SURFACE_LABELS: Record<SurfaceType, string> = {
   piso_residencial: "Piso Residencial",
-  piso_comercial: "Piso Comercial",
   pared_decorativa: "Pared Decorativa",
   acabado_especial: "Acabado Especial",
   renovacion: "Renovación",
-  exterior_piscina: "Exterior / Piscina",
 };
 
 export const FINISH_LABELS: Record<FinishType, string> = {

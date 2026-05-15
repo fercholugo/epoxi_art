@@ -8,11 +8,8 @@ import Footer from "@/components/layout/Footer";
 
 const CATEGORIAS = [
   { value: "todos", label: "Todos" },
+  { value: "lamparas", label: "Lámparas" },
   { value: "mesas", label: "Mesas" },
-  { value: "bandejas", label: "Bandejas" },
-  { value: "joyeria", label: "Joyería" },
-  { value: "cuadros", label: "Cuadros" },
-  { value: "decoracion", label: "Decoración" },
   { value: "otro", label: "Otros" },
 ];
 

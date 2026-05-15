@@ -10,6 +10,7 @@ class ProductCategoria(str, enum.Enum):
     joyeria = "joyeria"
     cuadros = "cuadros"
     decoracion = "decoracion"
+    lamparas = "lamparas"
     otro = "otro"
 
 
