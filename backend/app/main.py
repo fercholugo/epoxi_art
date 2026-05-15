@@ -35,23 +35,29 @@ async def _seed_admin() -> None:
 
 
 async def _migrate_categoria_to_varchar() -> None:
-    """Convert categoria column from PostgreSQL ENUM to VARCHAR if still ENUM."""
+    """Convert categoria column from PostgreSQL ENUM to VARCHAR using AUTOCOMMIT DDL."""
     try:
-        async with engine.connect() as conn:
+        # AUTOCOMMIT required for ALTER TYPE and ALTER TABLE DDL in asyncpg
+        ac_engine = engine.execution_options(isolation_level="AUTOCOMMIT")
+        async with ac_engine.connect() as conn:
             result = await conn.execute(text(
                 "SELECT data_type FROM information_schema.columns "
                 "WHERE table_name = 'products' AND column_name = 'categoria'"
             ))
             row = result.fetchone()
             if row and row[0] == "USER-DEFINED":
+                # First add lamparas to enum so existing cast doesn't fail
+                await conn.execute(text(
+                    "ALTER TYPE productcategoria ADD VALUE IF NOT EXISTS 'lamparas'"
+                ))
+                # Then convert column to VARCHAR
                 await conn.execute(text(
                     "ALTER TABLE products ALTER COLUMN categoria TYPE VARCHAR(50) USING categoria::text"
                 ))
                 await conn.execute(text("DROP TYPE IF EXISTS productcategoria CASCADE"))
-                await conn.commit()
-                logger.info("Migration: categoria converted from ENUM to VARCHAR")
+                logger.info("Migration OK: categoria converted ENUM → VARCHAR, lamparas added")
     except Exception as e:
-        logger.warning(f"Migration skipped: {e}")
+        logger.warning("Migration skipped: %s", e)
 
 
 @asynccontextmanager
