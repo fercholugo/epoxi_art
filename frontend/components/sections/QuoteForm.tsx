@@ -241,7 +241,7 @@ export default function QuoteForm() {
                   type="range"
                   min={5}
                   max={100}
-                  step={5}
+                  step={1}
                   className="w-full accent-gold cursor-pointer"
                   aria-valuemin={5}
                   aria-valuemax={100}

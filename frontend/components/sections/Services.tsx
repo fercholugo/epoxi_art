@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import type { Service } from "@/types";
-import { formatCurrency } from "@/lib/utils";
+import { useCurrency } from "@/contexts/currency";
 
 const SERVICES: Service[] = [
   {
@@ -57,6 +57,7 @@ const cardVariants = {
 };
 
 export default function Services() {
+  const { formatPrice } = useCurrency();
   return (
     <section
       id="servicios"
@@ -118,7 +119,7 @@ export default function Services() {
               {/* Price */}
               <div className="flex items-baseline gap-1">
                 <span className="text-gold font-bold text-xl">
-                  desde {formatCurrency(service.priceBase)}
+                  desde {formatPrice(service.priceBase)}
                 </span>
                 <span className="text-muted text-sm">/{service.unit}</span>
               </div>
