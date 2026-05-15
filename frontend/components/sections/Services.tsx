@@ -61,7 +61,7 @@ export default function Services() {
   return (
     <section
       id="servicios"
-      className="py-24 bg-dark/80"
+      className="py-24 bg-dark/65"
       aria-labelledby="services-heading"
     >
       <div className="max-w-7xl mx-auto px-6">

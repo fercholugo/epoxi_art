@@ -3,12 +3,12 @@
 import { useEffect, useRef } from "react";
 
 const BLOBS = [
-  { rx: 0.15, ry: 0.35, radius: 360, vx: 0.18, vy: 0.12, color: "#c9a84c", alpha: 0.22 },
-  { rx: 0.78, ry: 0.55, radius: 420, vx: -0.13, vy: 0.15, color: "#3d8c6e", alpha: 0.16 },
-  { rx: 0.48, ry: 0.12, radius: 300, vx: 0.10, vy: -0.14, color: "#c9a84c", alpha: 0.14 },
-  { rx: 0.88, ry: 0.28, radius: 280, vx: -0.20, vy: 0.09, color: "#8b6914", alpha: 0.19 },
-  { rx: 0.08, ry: 0.72, radius: 380, vx: 0.14, vy: -0.11, color: "#56bf97", alpha: 0.12 },
-  { rx: 0.62, ry: 0.82, radius: 320, vx: -0.16, vy: 0.12, color: "#c9a84c", alpha: 0.17 },
+  { rx: 0.15, ry: 0.35, radius: 400, vx: 0.18, vy: 0.12, color: "#c9a84c", alpha: 0.35 },
+  { rx: 0.78, ry: 0.55, radius: 460, vx: -0.13, vy: 0.15, color: "#3d8c6e", alpha: 0.26 },
+  { rx: 0.48, ry: 0.12, radius: 340, vx: 0.10, vy: -0.14, color: "#c9a84c", alpha: 0.24 },
+  { rx: 0.88, ry: 0.28, radius: 320, vx: -0.20, vy: 0.09, color: "#8b6914", alpha: 0.30 },
+  { rx: 0.08, ry: 0.72, radius: 420, vx: 0.14, vy: -0.11, color: "#56bf97", alpha: 0.20 },
+  { rx: 0.62, ry: 0.82, radius: 360, vx: -0.16, vy: 0.12, color: "#c9a84c", alpha: 0.28 },
 ];
 
 export default function AnimatedBackground() {
