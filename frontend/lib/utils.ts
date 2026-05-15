@@ -15,9 +15,9 @@ export const BASE_PRICES: Record<SurfaceType, number> = {
 
 export const FINISH_MULTIPLIERS: Record<FinishType, number> = {
   mate: 1.0,
-  semimate: 1.1,
-  satinado: 1.2,
-  alto_brillo: 1.35,
+  semimate: 1.05,
+  satinado: 1.10,
+  alto_brillo: 1.20,
 };
 
 export function calcPrice(

@@ -28,7 +28,7 @@ const schema = z.object({
     "acabado_especial",
     "renovacion",
   ] as const),
-  areaM2: z.number().min(5).max(500),
+  areaM2: z.number().min(5).max(100),
   tipoAcabado: z.enum(["mate", "semimate", "satinado", "alto_brillo"] as const),
   mensaje: z.string().max(500).optional(),
 });
@@ -77,12 +77,12 @@ export default function QuoteForm() {
     defaultValues: {
       tipoSuperficie: "piso_residencial",
       tipoAcabado: "mate",
-      areaM2: 50,
+      areaM2: 20,
     },
   });
 
   const { formatPrice } = useCurrency();
-  const area = watch("areaM2") ?? 50;
+  const area = watch("areaM2") ?? 20;
   const surface = watch("tipoSuperficie") ?? "piso_residencial";
   const finish = watch("tipoAcabado") ?? "mate";
   const price = calcPrice(surface as SurfaceType, area, finish as FinishType);
@@ -240,17 +240,17 @@ export default function QuoteForm() {
                   {...register("areaM2", { valueAsNumber: true })}
                   type="range"
                   min={5}
-                  max={500}
+                  max={100}
                   step={5}
                   className="w-full accent-gold cursor-pointer"
                   aria-valuemin={5}
-                  aria-valuemax={500}
+                  aria-valuemax={100}
                   aria-valuenow={area}
                   aria-label={`Área en metros cuadrados: ${area}`}
                 />
                 <div className="flex justify-between text-muted text-xs">
                   <span>5 m²</span>
-                  <span>500 m²</span>
+                  <span>100 m²</span>
                 </div>
               </div>
             </InputField>
