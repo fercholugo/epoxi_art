@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     template: "%s | EpoxyArt",
   },
   description:
-    "Transforma tus espacios con arte líquido. Pisos y paredes en resina epóxica con diseño personalizado. +350 proyectos · 8 años de experiencia · Garantía 5 años.",
+    "Transforma tus espacios con arte líquido. Pisos y paredes en resina epóxica con diseño personalizado. +100 proyectos · 5 años de experiencia · Garantía 5 años.",
   keywords: [
     "resina epoxica",
     "pisos epoxicos",

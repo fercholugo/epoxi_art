@@ -7,21 +7,25 @@ import QuoteForm from "@/components/sections/QuoteForm";
 import Gallery from "@/components/sections/Gallery";
 import Testimonials from "@/components/sections/Testimonials";
 import FAQ from "@/components/sections/FAQ";
+import AnimatedBackground from "@/components/ui/AnimatedBackground";
 
 export default function Home() {
   return (
     <>
-      <Navbar />
-      <main id="main-content">
-        <Hero />
-        <Services />
-        <Process />
-        <Gallery />
-        <Testimonials />
-        <QuoteForm />
-        <FAQ />
-      </main>
-      <Footer />
+      <AnimatedBackground />
+      <div className="relative" style={{ zIndex: 1 }}>
+        <Navbar />
+        <main id="main-content">
+          <Hero />
+          <Services />
+          <Process />
+          <Gallery />
+          <Testimonials />
+          <QuoteForm />
+          <FAQ />
+        </main>
+        <Footer />
+      </div>
     </>
   );
 }
