@@ -7,6 +7,7 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s [%(name)s] %(messa
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
+from sqlalchemy import text
 from app.core.config import settings
 from app.core.database import engine, Base
 from app.core.limiter import limiter
@@ -33,9 +34,30 @@ async def _seed_admin() -> None:
         logger.info("Admin inicial creado: %s", settings.admin_email)
 
 
+async def _migrate_categoria_to_varchar() -> None:
+    """Convert categoria column from PostgreSQL ENUM to VARCHAR if still ENUM."""
+    try:
+        async with engine.connect() as conn:
+            result = await conn.execute(text(
+                "SELECT data_type FROM information_schema.columns "
+                "WHERE table_name = 'products' AND column_name = 'categoria'"
+            ))
+            row = result.fetchone()
+            if row and row[0] == "USER-DEFINED":
+                await conn.execute(text(
+                    "ALTER TABLE products ALTER COLUMN categoria TYPE VARCHAR(50) USING categoria::text"
+                ))
+                await conn.execute(text("DROP TYPE IF EXISTS productcategoria CASCADE"))
+                await conn.commit()
+                logger.info("Migration: categoria converted from ENUM to VARCHAR")
+    except Exception as e:
+        logger.warning(f"Migration skipped: {e}")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
+        await _migrate_categoria_to_varchar()
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
         logger.info("Database tables created/verified successfully")
