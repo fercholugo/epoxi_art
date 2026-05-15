@@ -164,6 +164,9 @@ export default function ProductCard({ product }: { product: Product }) {
               Destacado
             </span>
           )}
+          <span className="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-lg shadow">
+            20% OFF
+          </span>
         </div>
 
         {/* Contenido */}
@@ -176,9 +179,14 @@ export default function ProductCard({ product }: { product: Product }) {
             <p className="text-muted text-sm mb-4 line-clamp-2 flex-1">{product.descripcion}</p>
           )}
           <div className="flex items-center justify-between mt-auto pt-3 border-t border-dark-3">
-            <span className="text-gold font-bold text-lg">
-              {formatPrice(product.precio)}
-            </span>
+            <div className="flex flex-col">
+              <span className="text-muted text-xs line-through">
+                {formatPrice(Math.round(product.precio / 0.8))}
+              </span>
+              <span className="text-gold font-bold text-lg leading-tight">
+                {formatPrice(product.precio)}
+              </span>
+            </div>
             <a
               href={waUrl}
               target="_blank"
