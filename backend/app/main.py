@@ -35,27 +35,34 @@ async def _seed_admin() -> None:
 
 
 async def _migrate_categoria_to_varchar() -> None:
-    """Convert categoria column from PostgreSQL ENUM to VARCHAR using AUTOCOMMIT DDL."""
-    try:
-        # AUTOCOMMIT required for ALTER TYPE and ALTER TABLE DDL in asyncpg
-        ac_engine = engine.execution_options(isolation_level="AUTOCOMMIT")
-        async with ac_engine.connect() as conn:
-            result = await conn.execute(text(
+    """Convert categoria ENUM → VARCHAR using asyncpg directly (autocommit DDL)."""
+    import asyncio
+    import asyncpg
+
+    raw_url = settings.database_url.replace("postgresql+asyncpg://", "postgresql://")
+
+    async def _run():
+        conn = await asyncpg.connect(raw_url)
+        try:
+            row = await conn.fetchrow(
                 "SELECT data_type FROM information_schema.columns "
-                "WHERE table_name = 'products' AND column_name = 'categoria'"
-            ))
-            row = result.fetchone()
-            if row and row[0] == "USER-DEFINED":
-                # First add lamparas to enum so existing cast doesn't fail
-                await conn.execute(text(
+                "WHERE table_name='products' AND column_name='categoria'"
+            )
+            if row and row["data_type"] == "USER-DEFINED":
+                await conn.execute(
                     "ALTER TYPE productcategoria ADD VALUE IF NOT EXISTS 'lamparas'"
-                ))
-                # Then convert column to VARCHAR
-                await conn.execute(text(
-                    "ALTER TABLE products ALTER COLUMN categoria TYPE VARCHAR(50) USING categoria::text"
-                ))
-                await conn.execute(text("DROP TYPE IF EXISTS productcategoria CASCADE"))
-                logger.info("Migration OK: categoria converted ENUM → VARCHAR, lamparas added")
+                )
+                await conn.execute(
+                    "ALTER TABLE products "
+                    "ALTER COLUMN categoria TYPE VARCHAR(50) USING categoria::text"
+                )
+                await conn.execute("DROP TYPE IF EXISTS productcategoria CASCADE")
+                logger.info("Migration OK: categoria ENUM → VARCHAR, lamparas added")
+        finally:
+            await conn.close()
+
+    try:
+        await asyncio.wait_for(_run(), timeout=15.0)
     except Exception as e:
         logger.warning("Migration skipped: %s", e)
 
