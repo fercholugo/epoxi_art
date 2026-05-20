@@ -4,7 +4,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import Providers from "@/components/providers/Providers";
 import "./globals.css";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://epoxyart.up.railway.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://epoxyart.art";
 
 const inter = Inter({
   subsets: ["latin"],
