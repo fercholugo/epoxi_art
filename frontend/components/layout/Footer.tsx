@@ -5,8 +5,7 @@ const INSTAGRAM = process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? "https://instagram.co
 
 const footerLinks = [
   { label: "Servicios", href: "#servicios" },
-  { label: "Diseño IA", href: "#ia" },
-  { label: "Galería", href: "#galeria" },
+  { label: "Tienda", href: "/tienda" },
   { label: "Cotizar", href: "#cotizar" },
   { label: "Preguntas Frecuentes", href: "#faq" },
 ];

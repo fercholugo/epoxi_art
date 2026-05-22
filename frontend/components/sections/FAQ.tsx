@@ -26,7 +26,7 @@ const FAQS = [
   },
   {
     q: "¿Puedo ver cómo quedaría antes de empezar?",
-    a: "¡Sí! Nuestra herramienta de Diseño IA analiza fotos de tu espacio y te muestra paletas de colores, texturas y acabados recomendados. También hacemos muestras físicas de 30x30 cm para que apruebes el resultado antes de iniciar.",
+    a: "¡Sí! Antes de iniciar cualquier proyecto revisamos contigo referencias visuales, te mostramos trabajos similares de nuestro portafolio y preparamos muestras físicas de 30x30 cm con los colores y texturas elegidos. Así apruebas el resultado antes de que empecemos.",
   },
   {
     q: "¿Tienen garantía y qué cubre?",
