@@ -142,7 +142,7 @@ export default function QuoteForm() {
   return (
     <section
       id="cotizar"
-      className="py-24 bg-dark-2/20"
+      className="py-24 bg-dark/20"
       aria-labelledby="quote-heading"
     >
       <div className="max-w-5xl mx-auto px-6">
