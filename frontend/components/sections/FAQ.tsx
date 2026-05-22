@@ -112,7 +112,7 @@ export default function FAQ() {
   return (
     <section
       id="faq"
-      className="py-24 bg-dark/65"
+      className="py-24 bg-dark/20"
       aria-labelledby="faq-heading"
     >
       {/* Schema.org structured data */}
